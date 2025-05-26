@@ -1,0 +1,28 @@
+# Unity temporäre/vermeidbare Ordner
+Library/
+Temp/
+Obj/
+Logs/
+UserSettings/
+
+# Visual Studio / IDE
+.vs/
+*.csproj
+*.sln
+*.user
+*.suo
+*.tmp
+
+# Unity generierte Dateien
+*.pidb
+*.booproj
+*.unityproj
+
+# Betriebssystem / Editor Müll
+.DS_Store
+Thumbs.db
+
+# Builds (optional, falls du keine Build-Ordner versionieren willst)
+Build/
+Builds/
+
