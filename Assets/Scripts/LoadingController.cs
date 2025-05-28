@@ -7,7 +7,7 @@ using TMPro;
 public class LoadingController : MonoBehaviour
 {
     public Slider loadingSlider;
-    public string sceneToLoad = "MainMenu";
+    public string sceneToLoad = "AuthScene";
     public TextMeshProUGUI loadingText; 
     public float textUpdateSpeed = 0.5f;
 
