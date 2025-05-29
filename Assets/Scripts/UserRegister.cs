@@ -4,16 +4,23 @@ using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
+
 
 public class UserRegister : MonoBehaviour
 {
-    [Header("Input Fields")]
-    public TMP_InputField usernameInput;
+    [Header("Input Fields")] public TMP_InputField usernameInput;
     public TMP_InputField passwordInput;
     public TMP_InputField passwordRepeatInput;
 
-    [Header("Error Display")]
-    public TMP_Text usernameErrorText;
+    [Header("Avatar Selection")] public Image avatarPreviewImage;
+    public Sprite[] avatarSprites; // Deine 10 Avatare
+    public string[] avatarIds; // avatar_fox, avatar_cat, ...
+
+    private int currentAvatarIndex = 0;
+    public string selectedAvatarId;
+
+    [Header("Error Display")] public TMP_Text usernameErrorText;
     public TMP_Text passwordErrorText;
     public TMP_Text registrationSuccessText;
 
@@ -22,9 +29,17 @@ public class UserRegister : MonoBehaviour
 
     private void Start()
     {
-        filePath = Application.dataPath + "/Database/users.json";
+        #if UNITY_EDITOR
+        // Im Unity Editor – Datei liegt im Assets-Ordner
+        filePath = Path.Combine(Application.dataPath, "Database/users.json");
+        #else
+        // Im Build – sichere, beschreibbare Pfade
+        filePath = Path.Combine(Application.persistentDataPath, "users.json");
+        #endif
+
         Debug.Log("User file path: " + filePath);
-        
+
+        UpdateAvatarPreview();
     }
 
     public void RegisterUser()
@@ -48,7 +63,7 @@ public class UserRegister : MonoBehaviour
             usernameErrorText.text = "Username already exists. Please choose another.";
             valid = false;
         }
-        
+
         if (!IsPasswordValid(password))
         {
             passwordErrorText.text = "Password invalid – please review the requirements.";
@@ -82,12 +97,13 @@ public class UserRegister : MonoBehaviour
             userId = Guid.NewGuid().ToString(),
             userName = username,
             password = password,
-            createdAt = DateTime.UtcNow.ToString("o")
+            createdAt = DateTime.UtcNow.ToString("o"),
+            avatarId = selectedAvatarId
         };
 
         userList.users.Add(newUser);
         SaveUsers(userList);
-        
+
         // Felder leeren
         usernameInput.text = "";
         passwordInput.text = "";
@@ -132,7 +148,7 @@ public class UserRegister : MonoBehaviour
         string pattern = @"^(?=.*[A-Z])(?=.*\d)(?=.*[!§$?\/])[A-Za-z\d!§$?\/]{6,12}$";
         return Regex.IsMatch(password, pattern);
     }
-    
+
     private bool UsernameExists(string usernameToCheck)
     {
         UserList existingUsers = LoadUsers();
@@ -147,11 +163,35 @@ public class UserRegister : MonoBehaviour
 
         return false;
     }
-    
+
+    public void ShowPreviousAvatar()
+    {
+        currentAvatarIndex--;
+        if (currentAvatarIndex < 0)
+            currentAvatarIndex = avatarSprites.Length - 1;
+
+        UpdateAvatarPreview();
+    }
+
+    public void ShowNextAvatar()
+    {
+        currentAvatarIndex++;
+        if (currentAvatarIndex >= avatarSprites.Length)
+            currentAvatarIndex = 0;
+
+        UpdateAvatarPreview();
+    }
+
+    private void UpdateAvatarPreview()
+    {
+        avatarPreviewImage.sprite = avatarSprites[currentAvatarIndex];
+        selectedAvatarId = avatarIds[currentAvatarIndex];
+    }
+
+
     private IEnumerator HideSuccessMessageAfterSeconds(float seconds)
     {
         yield return new WaitForSeconds(seconds);
         registrationSuccessText.gameObject.SetActive(false);
     }
-    
 }

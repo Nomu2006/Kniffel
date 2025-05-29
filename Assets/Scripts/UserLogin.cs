@@ -18,7 +18,14 @@ public class UserLogin : MonoBehaviour
 
     private void Start()
     {
-        filePath = Application.dataPath + "/Database/users.json";
+        #if UNITY_EDITOR
+        // Im Unity Editor – Datei liegt im Assets-Ordner
+        filePath = Path.Combine(Application.dataPath, "Database/users.json");
+        #else
+        // Im Build – sichere, beschreibbare Pfade
+        filePath = Path.Combine(Application.persistentDataPath, "users.json");
+        #endif
+
         Debug.Log("User file path: " + filePath);
     }
 

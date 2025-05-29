@@ -9,6 +9,7 @@ public class UserData
     public string userName;
     public string password;
     public string createdAt;
+    public string avatarId;
 }
 
 [Serializable]
