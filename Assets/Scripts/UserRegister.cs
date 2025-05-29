@@ -13,9 +13,10 @@ public class UserRegister : MonoBehaviour
     public TMP_InputField passwordInput;
     public TMP_InputField passwordRepeatInput;
 
-    [Header("Avatar Selection")] public Image avatarPreviewImage;
-    public Sprite[] avatarSprites; // Deine 10 Avatare
-    public string[] avatarIds; // avatar_fox, avatar_cat, ...
+    [Header("Avatar Selection")]
+    public Image avatarPreviewImage;
+    public string[] avatarIds; // Nur noch IDs, z. B. "avatar_cat", "avatar_dog"
+
 
     private int currentAvatarIndex = 0;
     public string selectedAvatarId;
@@ -168,7 +169,7 @@ public class UserRegister : MonoBehaviour
     {
         currentAvatarIndex--;
         if (currentAvatarIndex < 0)
-            currentAvatarIndex = avatarSprites.Length - 1;
+            currentAvatarIndex = avatarIds.Length - 1;
 
         UpdateAvatarPreview();
     }
@@ -176,7 +177,7 @@ public class UserRegister : MonoBehaviour
     public void ShowNextAvatar()
     {
         currentAvatarIndex++;
-        if (currentAvatarIndex >= avatarSprites.Length)
+        if (currentAvatarIndex >= avatarIds.Length)
             currentAvatarIndex = 0;
 
         UpdateAvatarPreview();
@@ -184,11 +185,10 @@ public class UserRegister : MonoBehaviour
 
     private void UpdateAvatarPreview()
     {
-        avatarPreviewImage.sprite = avatarSprites[currentAvatarIndex];
         selectedAvatarId = avatarIds[currentAvatarIndex];
+        avatarPreviewImage.sprite = AvatarDatabase.Instance.GetAvatarSprite(selectedAvatarId);
     }
-
-
+    
     private IEnumerator HideSuccessMessageAfterSeconds(float seconds)
     {
         yield return new WaitForSeconds(seconds);

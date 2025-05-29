@@ -50,7 +50,6 @@ public class UserLogin : MonoBehaviour
 
     public bool ExistUser(string username, string password)
     {
-        // Datei einlesen
         string json = File.ReadAllText(filePath);
         UserList userList = JsonUtility.FromJson<UserList>(json);
 
@@ -60,17 +59,21 @@ public class UserLogin : MonoBehaviour
             {
                 if (user.password == password)
                 {
+                    UserSessionManager.Instance.LoggedInUsername = user.userName;
+                    UserSessionManager.Instance.AvatarId = user.avatarId;
+
+                    Debug.Log("✅ Logged in as: " + user.userName + " | Avatar: " + user.avatarId);
                     return true;
                 }
                 else
                 {
-                    Debug.Log(user.userName + " doesn't match");
-                    return false; // Benutzername korrekt, Passwort falsch
+                    Debug.Log("❌ Incorrect password for user: " + user.userName);
+                    return false;
                 }
             }
         }
 
-        Debug.Log("Username not found: " + username);
-        return false; // Benutzername nicht gefunden
+        Debug.Log("❌ Username not found: " + username);
+        return false;
     }
 }
