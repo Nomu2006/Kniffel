@@ -11,6 +11,8 @@ public class DiceThrower : MonoBehaviour
 
     private int rollCount = 0;
     private bool isWorthyOfRoll = true;
+    public BoxCollider spawnArea;
+
 
     private void Update()
     {
@@ -29,10 +31,11 @@ public class DiceThrower : MonoBehaviour
 
         for (int i = 0; i < amountOfDice; i++)
         {
-            Vector3 spawnPos = transform.position + new Vector3(i * 1.5f, 10f, 0);
+            Vector3 spawnPos = GetRandomSpawnPosition();
             Dice newDice = Instantiate(dicePrefab, spawnPos, Quaternion.identity);
             spawnedDice.Add(newDice);
         }
+        
     }
     private void RollDice()
     {
@@ -63,7 +66,7 @@ public class DiceThrower : MonoBehaviour
                     if (die != null)
                         Destroy(die.gameObject);
 
-                    Vector3 spawnPos = transform.position + new Vector3(i * 1.5f, 10f, 0);
+                    Vector3 spawnPos = GetRandomSpawnPosition();
                     Dice newDie = Instantiate(dicePrefab, spawnPos, Quaternion.identity);
                     newSpawnList.Add(newDie);
                 }
@@ -119,4 +122,20 @@ public class DiceThrower : MonoBehaviour
 
         isWorthyOfRoll = true;
     }
+    
+    private Vector3 GetRandomSpawnPosition()
+    {
+        Vector3 center = spawnArea.transform.TransformPoint(spawnArea.center);
+        Vector3 size = Vector3.Scale(spawnArea.size, spawnArea.transform.lossyScale);
+
+        float x = Random.Range(center.x - size.x / 2, center.x + size.x / 2);
+        float y = center.y;
+        float z = Random.Range(center.z - size.z / 2, center.z + size.z / 2);
+
+        Vector3 pos = new Vector3(x, y + 2f, z); // Etwas über der Box zum besseren Fallen
+        Debug.Log($"🎯 Spawning at: {pos}");
+        return pos;
+    }
+
+    
 }
