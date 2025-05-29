@@ -34,6 +34,20 @@
             "password": "Test1111!",
             "createdAt": "2025-05-29T12:26:45.5870779Z",
             "avatarId": "avatar_badger"
+        },
+        {
+            "userId": "46b3841c-b235-4a7a-9756-1e992f3de113",
+            "userName": "Katja2222",
+            "password": "Katja2222!",
+            "createdAt": "2025-05-29T14:22:36.8147002Z",
+            "avatarId": "avatar_dragon"
+        },
+        {
+            "userId": "ec436cbc-dd3c-420a-ab71-fac6db454a11",
+            "userName": "Pawel3232",
+            "password": "Pawel3232!",
+            "createdAt": "2025-05-29T14:43:00.2478545Z",
+            "avatarId": "avatar_scorpion"
         }
     ]
 }
