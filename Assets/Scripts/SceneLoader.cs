@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class AuthSceneLoader : MonoBehaviour
+public class SceneLoader : MonoBehaviour
 {
     public void LoadSceneByName(string sceneName)
     {
