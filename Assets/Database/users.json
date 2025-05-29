@@ -4,13 +4,36 @@
             "userId": "2f54167e-d31a-4a21-a8ab-0901e575c278",
             "userName": "Test22",
             "password": "Test22!",
-            "createdAt": "2025-05-29T00:13:59.0402212Z"
+            "createdAt": "2025-05-29T00:13:59.0402212Z",
+            "avatarId": ""
         },
         {
             "userId": "0ebd2f23-ba7a-43c3-8703-2514c7cb3c80",
             "userName": "Test1994",
             "password": "Test1994!",
-            "createdAt": "2025-05-29T00:22:09.7924714Z"
+            "createdAt": "2025-05-29T00:22:09.7924714Z",
+            "avatarId": ""
+        },
+        {
+            "userId": "29820393-d7b4-4c8a-b04d-60b5eac2823c",
+            "userName": "Pawel22",
+            "password": "Pawel22!",
+            "createdAt": "2025-05-29T10:43:26.1233622Z",
+            "avatarId": "avatar_gorilla"
+        },
+        {
+            "userId": "121ea6d4-df56-497e-81ff-5881314444a2",
+            "userName": "Katja22",
+            "password": "Katja22!",
+            "createdAt": "2025-05-29T12:21:12.5864697Z",
+            "avatarId": "avatar_badger"
+        },
+        {
+            "userId": "45465faf-866a-4c41-820f-cd6e6879bf13",
+            "userName": "Test1111",
+            "password": "Test1111!",
+            "createdAt": "2025-05-29T12:26:45.5870779Z",
+            "avatarId": "avatar_badger"
         }
     ]
 }
