@@ -1,0 +1,16 @@
+{
+    "users": [
+        {
+            "userId": "2f54167e-d31a-4a21-a8ab-0901e575c278",
+            "userName": "Test22",
+            "password": "Test22!",
+            "createdAt": "2025-05-29T00:13:59.0402212Z"
+        },
+        {
+            "userId": "0ebd2f23-ba7a-43c3-8703-2514c7cb3c80",
+            "userName": "Test1994",
+            "password": "Test1994!",
+            "createdAt": "2025-05-29T00:22:09.7924714Z"
+        }
+    ]
+}
