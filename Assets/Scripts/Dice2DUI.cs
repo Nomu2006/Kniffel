@@ -33,18 +33,30 @@ public class Dice2DUI : MonoBehaviour
             yield break;
         }
 
-        float time = 0f;
+        float elapsed = 0f;
+        float spriteTimer = 0f;
+        float currentInterval = rollInterval;
         Vector2 startPos = rt.anchoredPosition;
 
-        while (time < rollDuration)
+        while (elapsed < rollDuration)
         {
-            rt.anchoredPosition = Vector2.Lerp(startPos, targetPosition, time / rollDuration);
-            int r = Random.Range(0, 6);
-            img.sprite = diceSides[r];
-            time += rollInterval;
-            yield return new WaitForSeconds(rollInterval);
+            // Bewegung
+            rt.anchoredPosition = Vector2.Lerp(startPos, targetPosition, elapsed / rollDuration);
+
+            // Sprite-Wechsel alle X Sekunden
+            spriteTimer += Time.deltaTime;
+            if (spriteTimer >= currentInterval)
+            {
+                int r = Random.Range(0, 6);
+                img.sprite = diceSides[r];
+                spriteTimer = 0f;
+            }
+
+            elapsed += Time.deltaTime;
+            yield return null; // ← kein harter Wait mehr!
         }
 
+        // Endgültiges Ergebnis anzeigen
         CurrentValue = Random.Range(1, 7);
         img.sprite = diceSides[CurrentValue - 1];
         rt.anchoredPosition = targetPosition;
