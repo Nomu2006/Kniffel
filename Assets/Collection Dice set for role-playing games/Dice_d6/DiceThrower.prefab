@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 120ceebb79777cb4aa013ec1a7dcaef0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  diceToThrow: {fileID: 5049056417384857894, guid: 5ec170f5d4cec4644836154a576b7884, type: 3}
+  dicePrefab: {fileID: 0}
   amountOfDice: 5
   throwForce: 5
   rollForce: 10
+  spawnedDice: []
