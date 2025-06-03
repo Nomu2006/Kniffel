@@ -1,0 +1,16 @@
+# Alle Textdateien automatisch erkennen und normalisieren
+* text=auto
+
+# Unity-spezifische Dateien als binär oder mit festen EOLs behandeln
+*.cs text eol=lf
+*.shader text eol=lf
+*.cginc text eol=lf
+*.unity binary
+*.prefab text eol=lf
+*.mat text eol=lf
+*.meta text eol=lf
+*.asset text eol=lf
+*.asmdef text eol=lf
+*.json text eol=lf
+*.xml text eol=lf
+*.txt text eol=lf

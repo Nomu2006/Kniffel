@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class DiceThrower : MonoBehaviour
@@ -13,6 +13,7 @@ public class DiceThrower : MonoBehaviour
     private bool isWorthyOfRoll = true;
     public BoxCollider spawnArea;
 
+    public RoundManager roundManager;
 
     private void Update()
     {
@@ -21,6 +22,7 @@ public class DiceThrower : MonoBehaviour
             RollDice();
         }
     }
+
     private void SpawnDice()
     {
         foreach (var die in spawnedDice)
@@ -31,14 +33,27 @@ public class DiceThrower : MonoBehaviour
 
         for (int i = 0; i < amountOfDice; i++)
         {
-            Vector3 spawnPos = GetRandomSpawnPosition();
+            Vector3 center = spawnArea.transform.TransformPoint(spawnArea.center);
+            Vector3 size = Vector3.Scale(spawnArea.size, spawnArea.transform.lossyScale);
+
+            float x = Random.Range(center.x - size.x / 2, center.x + size.x / 2);
+            float y = center.y + 2f;
+            float z = Random.Range(center.z - size.z / 2, center.z + size.z / 2);
+            Vector3 spawnPos = new Vector3(x, y, z);
+
             Dice newDice = Instantiate(dicePrefab, spawnPos, Quaternion.identity);
             spawnedDice.Add(newDice);
         }
-        
     }
+
     private void RollDice()
     {
+
+        if (!roundManager.roundActive)
+        {
+            roundManager.StartRound();
+        }
+
         if (rollCount >= 3)
         {
             isWorthyOfRoll = false;
@@ -66,7 +81,14 @@ public class DiceThrower : MonoBehaviour
                     if (die != null)
                         Destroy(die.gameObject);
 
-                    Vector3 spawnPos = GetRandomSpawnPosition();
+                    Vector3 center = spawnArea.transform.TransformPoint(spawnArea.center);
+                    Vector3 size = Vector3.Scale(spawnArea.size, spawnArea.transform.lossyScale);
+
+                    float x = Random.Range(center.x - size.x / 2, center.x + size.x / 2);
+                    float y = center.y + 2f;
+                    float z = Random.Range(center.z - size.z / 2, center.z + size.z / 2);
+                    Vector3 spawnPos = new Vector3(x, y, z);
+
                     Dice newDie = Instantiate(dicePrefab, spawnPos, Quaternion.identity);
                     newSpawnList.Add(newDie);
                 }
@@ -74,7 +96,10 @@ public class DiceThrower : MonoBehaviour
 
             spawnedDice = newSpawnList;
         }
+
         rollCount++;
+
+          roundManager?.RegisterRoll();
         StartCoroutine(ApplyForcesDelayed());
     }
 
@@ -119,23 +144,6 @@ public class DiceThrower : MonoBehaviour
         spawnedDice.Clear();
 
         rollCount = 0;
-
         isWorthyOfRoll = true;
     }
-    
-    private Vector3 GetRandomSpawnPosition()
-    {
-        Vector3 center = spawnArea.transform.TransformPoint(spawnArea.center);
-        Vector3 size = Vector3.Scale(spawnArea.size, spawnArea.transform.lossyScale);
-
-        float x = Random.Range(center.x - size.x / 2, center.x + size.x / 2);
-        float y = center.y;
-        float z = Random.Range(center.z - size.z / 2, center.z + size.z / 2);
-
-        Vector3 pos = new Vector3(x, y + 2f, z); // Etwas über der Box zum besseren Fallen
-        Debug.Log($"🎯 Spawning at: {pos}");
-        return pos;
-    }
-
-    
 }
