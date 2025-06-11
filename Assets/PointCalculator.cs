@@ -104,6 +104,8 @@ public class PointCalculator : MonoBehaviour
         int points = ComputeSum(diceThrower.spawnedDice, number);
         ChangeTextLong(GetTextField(number), "", points);
         UpdateUpperTotal();
+        
+        FindFirstObjectByType<RoundManager>()?.ConfirmScoring();
     }
 
     private void ScoreOfAKind(int count, TextMeshProUGUI textField)
@@ -112,6 +114,9 @@ public class PointCalculator : MonoBehaviour
         int sum = groups.Any(g => g.Count() >= count) ? diceThrower.spawnedDice.Sum(d => d.GetNumberOnTopFace()) : 0;
         ChangeTextLong(textField, "", sum);
         UpdateFinalTotal();
+        
+        FindFirstObjectByType<RoundManager>()?.ConfirmScoring();
+
     }
 
     public void ScoreFullHouse()
@@ -121,6 +126,9 @@ public class PointCalculator : MonoBehaviour
         fullHouse = score;
         ChangeTextLong(fullHouseText, "", fullHouse);
         UpdateFinalTotal();
+        
+        FindFirstObjectByType<RoundManager>()?.ConfirmScoring();
+
     }
 
     public void ScoreSmallStraight()
@@ -135,6 +143,9 @@ public class PointCalculator : MonoBehaviour
         smallStraight = score;
         ChangeTextLong(smallStraightText, "", smallStraight);
         UpdateFinalTotal();
+        
+        FindFirstObjectByType<RoundManager>()?.ConfirmScoring();
+
     }
 
     public void ScoreLargeStraight()
@@ -148,6 +159,9 @@ public class PointCalculator : MonoBehaviour
         largeStraight = score;
         ChangeTextLong(largeStraightText, "", largeStraight);
         UpdateFinalTotal();
+        
+        FindFirstObjectByType<RoundManager>()?.ConfirmScoring();
+
     }
 
     public void ScoreYahtzee()
@@ -158,6 +172,9 @@ public class PointCalculator : MonoBehaviour
         yahtzee = score;
         ChangeTextLong(yahtzeeText, "", yahtzee);
         UpdateFinalTotal();
+        
+        FindFirstObjectByType<RoundManager>()?.ConfirmScoring();
+
     }
 
 
@@ -167,6 +184,9 @@ public class PointCalculator : MonoBehaviour
         chance = score;
         ChangeTextLong(chanceText, "", chance);
         UpdateFinalTotal();
+        
+        FindFirstObjectByType<RoundManager>()?.ConfirmScoring();
+
     }
     public void ResetHighscore()
     {
