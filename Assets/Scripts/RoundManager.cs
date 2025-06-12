@@ -1,7 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 
 public class RoundManager : MonoBehaviour
 {
@@ -47,16 +45,6 @@ public class RoundManager : MonoBehaviour
         {
             EndRound();
         }
-    }
-
-    private void StartNewRound()
-    {
-        currentTry = 0;
-        remainingTime = totalTime;
-        roundActive = true;
-
-        diceThrower.ResetDiceAndTimer();
-        UpdateUI();
     }
 
     public void StartRound()

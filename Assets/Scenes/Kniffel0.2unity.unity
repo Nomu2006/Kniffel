@@ -571,6 +571,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 0}
   twosText: {fileID: 0}
   threesText: {fileID: 0}
@@ -1657,6 +1658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 0}
   twosText: {fileID: 0}
   threesText: {fileID: 0}
@@ -2040,6 +2042,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 606700305}
   twosText: {fileID: 1040048461}
   threesText: {fileID: 1735278493}
@@ -2713,6 +2716,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 606700305}
   twosText: {fileID: 1040048461}
   threesText: {fileID: 1735278493}
@@ -3050,6 +3054,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 606700305}
   twosText: {fileID: 1040048461}
   threesText: {fileID: 1735278493}
@@ -3396,6 +3401,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 606700305}
   twosText: {fileID: 1040048461}
   threesText: {fileID: 1735278493}
@@ -4438,6 +4444,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 0}
   twosText: {fileID: 0}
   threesText: {fileID: 0}
@@ -5297,6 +5304,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 0}
   twosText: {fileID: 0}
   threesText: {fileID: 0}
@@ -5703,6 +5711,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 0}
   twosText: {fileID: 0}
   threesText: {fileID: 0}
@@ -7340,6 +7349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 0}
   twosText: {fileID: 0}
   threesText: {fileID: 0}
@@ -9252,6 +9262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 606700305}
   twosText: {fileID: 1040048461}
   threesText: {fileID: 1735278493}
@@ -9986,6 +9997,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 606700305}
   twosText: {fileID: 1040048461}
   threesText: {fileID: 1735278493}
@@ -10724,6 +10736,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 606700305}
   twosText: {fileID: 1040048461}
   threesText: {fileID: 1735278493}
@@ -10939,8 +10952,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: SECOND TRY
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 03430f96a5060a340ba2badaa4fa4e0b, type: 2}
-  m_sharedMaterial: {fileID: -3799764585114834425, guid: 03430f96a5060a340ba2badaa4fa4e0b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -11734,6 +11747,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 606700305}
   twosText: {fileID: 1040048461}
   threesText: {fileID: 1735278493}
@@ -12213,6 +12227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 0}
   twosText: {fileID: 0}
   threesText: {fileID: 0}
@@ -12402,6 +12417,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 0}
   twosText: {fileID: 0}
   threesText: {fileID: 0}
@@ -13324,8 +13340,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1:30
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 03430f96a5060a340ba2badaa4fa4e0b, type: 2}
-  m_sharedMaterial: {fileID: -3799764585114834425, guid: 03430f96a5060a340ba2badaa4fa4e0b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -13711,6 +13727,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 606700305}
   twosText: {fileID: 1040048461}
   threesText: {fileID: 1735278493}
@@ -14039,6 +14056,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 606700305}
   twosText: {fileID: 1040048461}
   threesText: {fileID: 1735278493}
@@ -14588,6 +14606,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 606700305}
   twosText: {fileID: 1040048461}
   threesText: {fileID: 1735278493}
@@ -15193,6 +15212,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 606700305}
   twosText: {fileID: 1040048461}
   threesText: {fileID: 1735278493}
@@ -15359,6 +15379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 606700305}
   twosText: {fileID: 1040048461}
   threesText: {fileID: 1735278493}
@@ -16120,6 +16141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 0}
   twosText: {fileID: 0}
   threesText: {fileID: 0}
@@ -16964,6 +16986,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 606700305}
   twosText: {fileID: 1040048461}
   threesText: {fileID: 1735278493}
@@ -17252,6 +17275,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 0}
   twosText: {fileID: 0}
   threesText: {fileID: 0}
@@ -18640,6 +18664,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceThrower: {fileID: 366556559}
+  roundManager: {fileID: 0}
   onesText: {fileID: 0}
   twosText: {fileID: 0}
   threesText: {fileID: 0}
@@ -19481,6 +19506,10 @@ PrefabInstance:
       propertyPath: yahtzeeText
       value: 
       objectReference: {fileID: 1363223467}
+    - target: {fileID: 651613976359822212, guid: 7739e0d451c08114daf69ce3fef5aed5, type: 3}
+      propertyPath: roundManager
+      value: 
+      objectReference: {fileID: 11545608}
     - target: {fileID: 651613976359822212, guid: 7739e0d451c08114daf69ce3fef5aed5, type: 3}
       propertyPath: fullHouseText
       value: 
