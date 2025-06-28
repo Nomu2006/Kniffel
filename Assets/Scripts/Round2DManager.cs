@@ -8,7 +8,8 @@ public class Round2DManager : MonoBehaviour
     [Header("UI References")]
     public Dice2DThrower diceThrower; // Referenz zum Dice Thrower
     public Transform holdDiceContainer; // Container für gehaltene Würfel
-    public Text tryNumberLabel; // "3", "2", "1" Anzeige
+    public Text tryNumberLabel; // "3", "2", "1" Anzeige (veraltetes Text-System)
+    public TMPro.TMP_Text tryNumberTMPLabel; // TMP Alternative für tryNumberLabel
     public Button rollButton; // Roll Button
     
     [Header("Round Settings")]
@@ -246,10 +247,18 @@ public class Round2DManager : MonoBehaviour
     
     void UpdateTryCounter()
     {
+        // Unterstützung für beide Text-Systeme
         if (tryNumberLabel != null)
         {
             tryNumberLabel.text = currentTries.ToString();
         }
+        
+        if (tryNumberTMPLabel != null)
+        {
+            tryNumberTMPLabel.text = currentTries.ToString();
+        }
+        
+        Debug.Log($"Try Counter aktualisiert: {currentTries} verbleibende Würfe");
     }
     
     void UpdateRollButton()
@@ -259,18 +268,28 @@ public class Round2DManager : MonoBehaviour
             // Button deaktivieren wenn keine Versuche mehr
             rollButton.interactable = currentTries > 0 && isRoundActive;
             
-            // Button Text anpassen (optional)
+            // Button Text anpassen (unterstützt beide Text-Systeme)
             Text buttonText = rollButton.GetComponentInChildren<Text>();
+            TMPro.TMP_Text buttonTMPText = rollButton.GetComponentInChildren<TMPro.TMP_Text>();
+            
+            string buttonTextContent;
+            if (currentTries > 0)
+            {
+                buttonTextContent = $"ROLL ({currentTries})";
+            }
+            else
+            {
+                buttonTextContent = "NO ROLLS LEFT";
+            }
+            
             if (buttonText != null)
             {
-                if (currentTries > 0)
-                {
-                    buttonText.text = $"ROLL ({currentTries})";
-                }
-                else
-                {
-                    buttonText.text = "NO ROLLS LEFT";
-                }
+                buttonText.text = buttonTextContent;
+            }
+            
+            if (buttonTMPText != null)
+            {
+                buttonTMPText.text = buttonTextContent;
             }
         }
     }
