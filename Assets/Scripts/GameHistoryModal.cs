@@ -145,27 +145,27 @@ public class GameHistoryModal : MonoBehaviour
         if (UserScoreManager.Instance == null)
         {
             Debug.LogError("❌ UserScoreManager.Instance ist NULL!");
-            ShowNoDataMessage("UserScoreManager nicht verfügbar");
+            ShowNoDataMessage("UserScoreManager not available");
             return;
         }
-        
-        Debug.Log("✅ UserScoreManager gefunden");
-        
+
+        Debug.Log("✅ UserScoreManager found");
+
         UserScoreData userData = UserScoreManager.Instance.GetUserScoreData(userName);
         
         if (userData == null)
         {
             Debug.LogWarning($"⚠️ Keine UserScoreData für {userName} gefunden");
-            ShowNoDataMessage("Noch keine Spiele gespielt");
+            ShowNoDataMessage("No games played yet");
             return;
         }
         
-        Debug.Log($"📈 UserScoreData geladen: {userData.games.Count} Spiele gefunden");
+        Debug.Log($"📈 UserScoreData loaded: {userData.games.Count} games found");
         
         if (userData.games.Count == 0)
         {
             Debug.Log("📝 Keine Spiele in der Liste");
-            ShowNoDataMessage("Noch keine Spiele gespielt");
+            ShowNoDataMessage("No games played yet");
             return;
         }
         
@@ -228,10 +228,10 @@ public class GameHistoryModal : MonoBehaviour
             return;
         }
         
-        string stats = $"Statistiken:\n";
-        stats += $"Spiele gespielt: {userData.totalGamesPlayed}\n";
-        stats += $"Bester Score: {userData.bestScore}\n";
-        stats += $"Durchschnitt: {userData.averageScore:F1}";
+        string stats = $"Statistics:\n";
+        stats += $"Games Played: {userData.totalGamesPlayed}\n";
+        stats += $"Best Score: {userData.bestScore}\n";
+        stats += $"Average: {userData.averageScore:F1}";
         
         statsText.text = stats;
         Debug.Log($"📊 Statistiken aktualisiert: {userData.totalGamesPlayed} Spiele, Best: {userData.bestScore}");
