@@ -9,17 +9,17 @@ public class HighscoreEntry_UI : MonoBehaviour
     public TMP_Text usernameText; // Benutzername  
     public TMP_Text scoreText;    // Score
     public TMP_Text dateText;     // Datum
-    
+
     [Header("Visual Highlighting")]
     public Image backgroundImage; // Optional: Hintergrund für Top 3
     public Color goldColor = new Color(1f, 0.84f, 0f, 0.3f);     // Gold für Platz 1
     public Color silverColor = new Color(0.75f, 0.75f, 0.75f, 0.3f); // Silber für Platz 2
     public Color bronzeColor = new Color(0.8f, 0.5f, 0.2f, 0.3f);    // Bronze für Platz 3
-    
+
     void Start()
     {
         Debug.Log($"🏅 HighscoreEntry_UI Start() - GameObject: {gameObject.name}");
-        
+
         // Debug: Komponenten prüfen
         Debug.Log($"   Highscore Entry Komponenten Check:");
         Debug.Log($"   Rank Text: {rankText != null} - {(rankText != null ? rankText.name : "NULL")}");
@@ -28,11 +28,11 @@ public class HighscoreEntry_UI : MonoBehaviour
         Debug.Log($"   Date Text: {dateText != null} - {(dateText != null ? dateText.name : "NULL")}");
         Debug.Log($"   Background Image: {backgroundImage != null}");
     }
-    
+
     public void SetupEntry(HighscoreEntry highscoreEntry, int rank)
     {
         Debug.Log($"🔧 SetupEntry() aufgerufen für Rang {rank}: {highscoreEntry.userName} - {highscoreEntry.finalScore}");
-        
+
         // Rang setzen mit Emoji für Top 3
         if (rankText != null)
         {
@@ -44,7 +44,7 @@ public class HighscoreEntry_UI : MonoBehaviour
         {
             Debug.LogError("❌ Rank Text ist NULL!");
         }
-        
+
         // Username setzen
         if (usernameText != null)
         {
@@ -55,7 +55,7 @@ public class HighscoreEntry_UI : MonoBehaviour
         {
             Debug.LogError("❌ Username Text ist NULL!");
         }
-        
+
         // Score setzen
         if (scoreText != null)
         {
@@ -66,7 +66,7 @@ public class HighscoreEntry_UI : MonoBehaviour
         {
             Debug.LogError("❌ Score Text ist NULL!");
         }
-        
+
         // Datum setzen
         if (dateText != null)
         {
@@ -78,31 +78,32 @@ public class HighscoreEntry_UI : MonoBehaviour
         {
             Debug.LogError("❌ Date Text ist NULL!");
         }
-        
+
         // Visuelle Hervorhebung für Top 3
         ApplyRankStyling(rank);
-        
+
         // Aktueller User hervorheben
         HighlightCurrentUser(highscoreEntry.userName);
-        
+
         Debug.Log($"✅ SetupEntry abgeschlossen für Rang {rank}: {highscoreEntry.userName}");
     }
-    
+
     private string GetRankDisplay(int rank)
     {
         switch (rank)
         {
-            case 1: return "🥇 1.";
-            case 2: return "🥈 2.";
-            case 3: return "🥉 3.";
-            default: return $"{rank}.";
+            case 1: return "★ 1.";
+            case 2: return "☆ 2.";
+            case 3: return "• 3.";
+            default: return rank.ToString();
         }
+
     }
-    
+
     private void ApplyRankStyling(int rank)
     {
         if (backgroundImage == null) return;
-        
+
         // Hintergrundfarbe je nach Rang
         switch (rank)
         {
@@ -123,15 +124,15 @@ public class HighscoreEntry_UI : MonoBehaviour
                 break;
         }
     }
-    
+
     private void HighlightCurrentUser(string entryUserName)
     {
         // Aktuellen User hervorheben falls eingeloggt
-        if (UserSessionManager.Instance != null && 
+        if (UserSessionManager.Instance != null &&
             !string.IsNullOrEmpty(UserSessionManager.Instance.LoggedInUsername))
         {
             string currentUser = UserSessionManager.Instance.LoggedInUsername;
-            
+
             if (entryUserName.Equals(currentUser, System.StringComparison.OrdinalIgnoreCase))
             {
                 // Aktueller User - hervorheben
@@ -141,7 +142,7 @@ public class HighscoreEntry_UI : MonoBehaviour
                     usernameText.fontStyle = FontStyles.Bold;
                     Debug.Log($"👑 Aktueller User hervorgehoben: {currentUser}");
                 }
-                
+
                 // Optional: Rahmen oder Icon hinzufügen
                 if (backgroundImage != null && backgroundImage.color == Color.clear)
                 {
@@ -150,11 +151,11 @@ public class HighscoreEntry_UI : MonoBehaviour
             }
         }
     }
-    
+
     private string FormatDate(string dateString)
     {
         Debug.Log($"📅 FormatDate Input: {dateString}");
-        
+
         try
         {
             // Von "2025-06-28 20:56:52" zu "28.06.25"

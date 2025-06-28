@@ -199,7 +199,7 @@ public class HighscoreModal : MonoBehaviour
             return;
         }
         
-        string stats = $"🏆 Top 10 Bestenliste\n";
+        string stats = $" Top 10 Highscore\n";
         
         if (topScores.Count > 0)
         {
