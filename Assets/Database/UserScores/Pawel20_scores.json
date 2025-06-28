@@ -44,9 +44,31 @@
             "großeStraße": 40,
             "kniffel": 0,
             "chance": 15
+        },
+        {
+            "gameId": "b7a5e747-d32e-43d0-a8c3-f17b508cdee8",
+            "userName": "Pawel20",
+            "finalScore": 116,
+            "gameDate": "2025-06-29 00:51:59",
+            "upperSectionTotal": 26,
+            "bonusPoints": 0,
+            "lowerSectionTotal": 90,
+            "einer": 1,
+            "zweier": 2,
+            "dreier": 3,
+            "vierer": 4,
+            "fuenfer": 10,
+            "sechser": 6,
+            "dreierpasch": 0,
+            "viererpasch": 0,
+            "fullHouse": 0,
+            "kleineStraße": 30,
+            "großeStraße": 40,
+            "kniffel": 0,
+            "chance": 20
         }
     ],
-    "totalGamesPlayed": 2,
+    "totalGamesPlayed": 3,
     "bestScore": 151,
-    "averageScore": 106.5
+    "averageScore": 109.66666412353516
 }

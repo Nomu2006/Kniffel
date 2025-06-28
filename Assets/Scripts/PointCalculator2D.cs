@@ -611,21 +611,52 @@ public class PointCalculator2D : MonoBehaviour
 
 void EndGame()
 {
-    Debug.Log($"🔍 User Check: {UserSessionManager.Instance?.LoggedInUsername ?? "NULL"}");
     Debug.Log("SPIEL BEENDET!");
     
-    // Score über UserScoreManager speichern
+    // Score über UserScoreManager speichern (User-spezifisch)
     if (UserScoreManager.Instance != null)
     {
         UserScoreManager.Instance.SaveGameScore(this);
-        Debug.Log("Score wurde gespeichert!");
+        Debug.Log("✅ User-Score wurde gespeichert!");
+        
+        // Den letzten gespeicherten Score für Highscore verwenden
+        if (UserSessionManager.Instance != null && !string.IsNullOrEmpty(UserSessionManager.Instance.LoggedInUsername))
+        {
+            string currentUser = UserSessionManager.Instance.LoggedInUsername;
+            UserScoreData userData = UserScoreManager.Instance.GetUserScoreData(currentUser);
+            
+            if (userData != null && userData.games.Count > 0)
+            {
+                // Letztes Spiel (neuestes) für Highscore verwenden
+                GameScore latestGame = userData.games.OrderByDescending(g => g.gameDate).First();
+                
+                // Score auch zu globalem Highscore hinzufügen
+                if (HighscoreManager.Instance != null)
+                {
+                    HighscoreManager.Instance.AddScore(latestGame);
+                    Debug.Log("🏆 Score zu Highscore hinzugefügt!");
+                    
+                    // Prüfen ob Top 10
+                    bool isTopTen = HighscoreManager.Instance.IsScoreInTopTen(latestGame.finalScore);
+                    if (isTopTen)
+                    {
+                        int rank = HighscoreManager.Instance.GetPlayerRank(currentUser);
+                        Debug.Log($"🎉 TOP 10 ERREICHT! Platz {rank} in der Bestenliste!");
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning("HighscoreManager nicht gefunden!");
+                }
+            }
+        }
     }
     else
     {
         Debug.LogWarning("UserScoreManager nicht gefunden - Score wird nicht gespeichert!");
     }
     
-    // Optional: Game Over Modal anzeigen
+    // Game Over Modal anzeigen
     if (gameModalManager != null)
     {
         gameModalManager.OpenModal();
@@ -637,7 +668,7 @@ void EndGame()
     }
 }
 
-// Hilfsmethode für Console-Output falls kein Modal vorhanden
+// Erweiterte Console-Ausgabe mit Highscore-Info
 private void ShowGameOverInfoInConsole()
 {
     if (UserSessionManager.Instance != null && !string.IsNullOrEmpty(UserSessionManager.Instance.LoggedInUsername))
@@ -649,17 +680,34 @@ private void ShowGameOverInfoInConsole()
         Debug.Log($"🎉 Spiel beendet für {currentUser}!");
         Debug.Log($"📊 Finale Punkte: {finalScore}");
         
+        // User-spezifische Statistiken
         if (UserScoreManager.Instance != null)
         {
             UserScoreData userData = UserScoreManager.Instance.GetUserScoreData(currentUser);
             
-            Debug.Log($"🏆 Bester Score: {userData.bestScore}");
+            Debug.Log($"🏆 Bester persönlicher Score: {userData.bestScore}");
             Debug.Log($"🎮 Spiele gespielt: {userData.totalGamesPlayed}");
             Debug.Log($"📈 Durchschnitt: {userData.averageScore:F1}");
             
             if (finalScore >= userData.bestScore)
             {
                 Debug.Log("🎊 NEUER PERSÖNLICHER REKORD! 🎊");
+            }
+        }
+        
+        // Globale Highscore-Statistiken
+        if (HighscoreManager.Instance != null)
+        {
+            int playerRank = HighscoreManager.Instance.GetPlayerRank(currentUser);
+            if (playerRank > 0)
+            {
+                Debug.Log($"🌍 Globaler Rang: Platz {playerRank} von {HighscoreManager.Instance.GetTotalScoresCount()}");
+            }
+            
+            HighscoreEntry bestGlobalScore = HighscoreManager.Instance.GetBestScore();
+            if (bestGlobalScore != null)
+            {
+                Debug.Log($"🥇 Weltrekord: {bestGlobalScore.finalScore} von {bestGlobalScore.userName}");
             }
         }
     }
