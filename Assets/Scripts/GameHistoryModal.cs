@@ -228,10 +228,10 @@ public class GameHistoryModal : MonoBehaviour
             return;
         }
         
-        string stats = $"📊 Statistiken:\n";
-        stats += $"🎮 Spiele gespielt: {userData.totalGamesPlayed}\n";
-        stats += $"🏆 Bester Score: {userData.bestScore}\n";
-        stats += $"📈 Durchschnitt: {userData.averageScore:F1}";
+        string stats = $"Statistiken:\n";
+        stats += $"Spiele gespielt: {userData.totalGamesPlayed}\n";
+        stats += $"Bester Score: {userData.bestScore}\n";
+        stats += $"Durchschnitt: {userData.averageScore:F1}";
         
         statsText.text = stats;
         Debug.Log($"📊 Statistiken aktualisiert: {userData.totalGamesPlayed} Spiele, Best: {userData.bestScore}");
