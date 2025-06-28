@@ -47,6 +47,13 @@ public class PointCalculator2D : MonoBehaviour
     public Button kniffelRowButton;
     public Button chanceRowButton;
 
+    [Header("Visual Highlighting Settings")]
+    [SerializeField] private bool enableVisualHighlighting = true;
+    [SerializeField] private Color highlightColor = new Color(0.957f, 0.624f, 0.059f, 1f); // #F49F0F
+    [SerializeField] private Color normalButtonColor = Color.white;
+    [SerializeField] private Color disabledButtonColor = Color.gray;
+    [SerializeField] private Color normalTextColor = Color.black;
+
     // Tracking welche Kategorien bereits verwendet wurden
     private bool[] usedCategories = new bool[13]; // 6 upper + 7 lower
     private int filledCategories = 0;
@@ -54,16 +61,69 @@ public class PointCalculator2D : MonoBehaviour
     // Aktuelle Würfelwerte
     private List<int> currentDiceValues = new List<int>();
 
+    // Arrays für einfachen Zugriff auf UI Elemente
+    private Button[] rowButtons;
+    private TMP_InputField[] inputFields;
+
+    // Original Farben speichern
+    private ColorBlock[] originalButtonColors;
+    private Color[] originalInputTextColors;
+
     void Start()
     {
+        // Arrays initialisieren
+        InitializeUIArrays();
+
+        // Original Farben speichern
+        SaveOriginalColors();
+
         // Button Events setup
         SetupRowButtons();
 
         // Alle InputFields zu Beginn read-only
         SetAllFieldsReadOnly();
-        
+
         // Neue Runde starten
         StartNewRound();
+    }
+
+    void InitializeUIArrays()
+    {
+        rowButtons = new Button[] {
+            einerRowButton, zweierRowButton, dreierRowButton, viererRowButton,
+            fuenferRowButton, sechserRowButton, dreierpaschenRowButton,
+            viererpaschenRowButton, fullHouseRowButton, kleineStraßeRowButton,
+            großeStraßeRowButton, kniffelRowButton, chanceRowButton
+        };
+
+        inputFields = new TMP_InputField[] {
+            einerInput, zweierInput, dreierInput, viererInput, fuenferInput, sechserInput,
+            dreierpaschenInput, viererpaschenInput, fullHouseInput, kleineStraßeInput,
+            großeStraßeInput, kniffelInput, chanceInput
+        };
+    }
+
+    void SaveOriginalColors()
+    {
+        // Original Button Farben speichern
+        originalButtonColors = new ColorBlock[rowButtons.Length];
+        for (int i = 0; i < rowButtons.Length; i++)
+        {
+            if (rowButtons[i] != null)
+            {
+                originalButtonColors[i] = rowButtons[i].colors;
+            }
+        }
+
+        // Original InputField Text Farben speichern
+        originalInputTextColors = new Color[inputFields.Length];
+        for (int i = 0; i < inputFields.Length; i++)
+        {
+            if (inputFields[i] != null && inputFields[i].textComponent != null)
+            {
+                originalInputTextColors[i] = inputFields[i].textComponent.color;
+            }
+        }
     }
 
     void Update()
@@ -72,7 +132,7 @@ public class PointCalculator2D : MonoBehaviour
         if (roundManager != null && !diceThrower.IsRolling())
         {
             UpdateCurrentDiceValues();
-            UpdateCategoryButtons(); // HINZUGEFÜGT: Buttons nach jedem Wurf aktualisieren
+            UpdateCategoryButtons(); // Buttons nach jedem Wurf aktualisieren
         }
     }
 
@@ -100,10 +160,10 @@ public class PointCalculator2D : MonoBehaviour
         {
             roundManager.StartNewRound();
         }
-        
+
         // Buttons je nach Verfügbarkeit aktivieren/deaktivieren
         UpdateCategoryButtons();
-        
+
         Debug.Log("Neue Kniffel-Runde gestartet!");
     }
 
@@ -112,7 +172,7 @@ public class PointCalculator2D : MonoBehaviour
         if (roundManager != null)
         {
             currentDiceValues = roundManager.GetAllDiceValues();
-            
+
             // Debug: Zeige mögliche Punkte nach jedem Wurf
             if (currentDiceValues.Count == 5)
             {
@@ -130,7 +190,6 @@ public class PointCalculator2D : MonoBehaviour
             return;
         }
 
-        // GEÄNDERT: Erlaube Kategorie-Auswahl nach jedem Wurf (nicht nur nach Runden-Ende)
         // Prüfen ob überhaupt Würfelwerte vorhanden sind (mindestens ein Wurf gemacht)
         if (currentDiceValues.Count != 5)
         {
@@ -138,7 +197,7 @@ public class PointCalculator2D : MonoBehaviour
             return;
         }
 
-        // GEÄNDERT: Prüfen ob der Spieler überhaupt schon gewürfelt hat in dieser Runde
+        // Prüfen ob der Spieler überhaupt schon gewürfelt hat in dieser Runde
         if (roundManager != null && roundManager.GetCurrentThrowCount() == 0)
         {
             Debug.Log("Noch kein Wurf in dieser Runde gemacht!");
@@ -148,23 +207,23 @@ public class PointCalculator2D : MonoBehaviour
         // Punkte berechnen und eintragen
         int points = CalculatePointsForCategory(categoryIndex);
         SetCategoryPoints(categoryIndex, points);
-        
+
         // Kategorie als verwendet markieren
         usedCategories[categoryIndex] = true;
         filledCategories++;
-        
-        // GEÄNDERT: Runde explizit beenden wenn Kategorie gewählt wird
+
+        // Runde explizit beenden wenn Kategorie gewählt wird
         if (roundManager != null)
         {
             roundManager.EndCurrentRound();
         }
-        
+
         // UI aktualisieren
         UpdateCategoryButtons();
         CalculateTotal();
-        
+
         Debug.Log($"Kategorie {GetCategoryName(categoryIndex)} gewählt nach {roundManager?.GetCurrentThrowCount() ?? 0} Würfen: {points} Punkte");
-        
+
         // Prüfen ob Spiel beendet
         if (filledCategories >= 13)
         {
@@ -177,6 +236,159 @@ public class PointCalculator2D : MonoBehaviour
         }
     }
 
+    void UpdateCategoryButtons()
+    {
+        // Prüfen ob bereits ein Wurf in der aktuellen Runde gemacht wurde
+        bool hasThrown = roundManager != null && roundManager.GetCurrentThrowCount() > 0 && currentDiceValues.Count == 5;
+
+        for (int i = 0; i < rowButtons.Length; i++)
+        {
+            if (rowButtons[i] != null)
+            {
+                // Button ist nur verfügbar wenn:
+                // 1. Die Kategorie noch nicht verwendet wurde UND
+                // 2. Mindestens ein Wurf gemacht wurde
+                bool isAvailable = !usedCategories[i] && hasThrown;
+                bool isUsed = usedCategories[i];
+
+                // Button Interactability setzen
+                rowButtons[i].interactable = isAvailable;
+
+                // Visuelles Highlighting nur wenn aktiviert
+                if (enableVisualHighlighting)
+                {
+                    // Prüfen ob diese Kategorie Punkte bringen würde
+                    bool shouldHighlight = false;
+                    if (hasThrown && !usedCategories[i])
+                    {
+                        int points = CalculatePointsForCategory(i);
+                        shouldHighlight = points > 0;
+                    }
+
+                    // Button visuell anpassen
+                    UpdateButtonVisuals(i, isAvailable, shouldHighlight, isUsed);
+
+                    // InputField visuell anpassen
+                    if (inputFields[i] != null)
+                    {
+                        UpdateInputFieldVisuals(i, shouldHighlight, isUsed);
+                    }
+                }
+                else
+                {
+                    // Standard Verhalten ohne Highlighting
+                    RestoreOriginalButtonVisuals(i, isAvailable, isUsed);
+                    if (inputFields[i] != null)
+                    {
+                        RestoreOriginalInputFieldVisuals(i);
+                    }
+                }
+            }
+        }
+    }
+
+    void UpdateButtonVisuals(int index, bool isAvailable, bool shouldHighlight, bool isUsed)
+    {
+        Button button = rowButtons[index];
+        ColorBlock colors = originalButtonColors[index];
+
+        if (isUsed)
+        {
+            // Bereits verwendet - grau
+            colors.normalColor = disabledButtonColor;
+            colors.disabledColor = disabledButtonColor;
+        }
+        else if (!isAvailable)
+        {
+            // Noch nicht gewürfelt - dunkelgrau
+            colors.normalColor = disabledButtonColor * 0.7f;
+            colors.disabledColor = disabledButtonColor * 0.7f;
+        }
+        else if (shouldHighlight)
+        {
+            // Verfügbar und bringt Punkte - highlight color
+            colors.normalColor = highlightColor;
+            colors.highlightedColor = highlightColor * 1.2f;
+            colors.selectedColor = highlightColor * 0.8f;
+        }
+        else
+        {
+            // Verfügbar aber bringt keine Punkte - original colors
+            colors = originalButtonColors[index];
+        }
+
+        button.colors = colors;
+
+        // Button Text färben
+        TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
+        Text legacyButtonText = button.GetComponentInChildren<Text>();
+
+        Color textColor = shouldHighlight && !isUsed && isAvailable ? highlightColor : normalTextColor;
+
+        if (buttonText != null)
+        {
+            buttonText.color = textColor;
+        }
+        if (legacyButtonText != null)
+        {
+            legacyButtonText.color = textColor;
+        }
+    }
+
+    void UpdateInputFieldVisuals(int index, bool shouldHighlight, bool isUsed)
+    {
+        TMP_InputField inputField = inputFields[index];
+
+        // InputField Text färben
+        if (shouldHighlight && !isUsed)
+        {
+            inputField.textComponent.color = highlightColor;
+        }
+        else
+        {
+            inputField.textComponent.color = originalInputTextColors[index];
+        }
+    }
+
+    void RestoreOriginalButtonVisuals(int index, bool isAvailable, bool isUsed)
+    {
+        Button button = rowButtons[index];
+        ColorBlock colors = originalButtonColors[index];
+
+        if (isUsed)
+        {
+            colors.normalColor = disabledButtonColor;
+            colors.disabledColor = disabledButtonColor;
+        }
+        else if (!isAvailable)
+        {
+            colors.normalColor = disabledButtonColor * 0.7f;
+            colors.disabledColor = disabledButtonColor * 0.7f;
+        }
+
+        button.colors = colors;
+
+        // Text Farbe zurücksetzen
+        TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
+        Text legacyButtonText = button.GetComponentInChildren<Text>();
+
+        if (buttonText != null)
+        {
+            buttonText.color = normalTextColor;
+        }
+        if (legacyButtonText != null)
+        {
+            legacyButtonText.color = normalTextColor;
+        }
+    }
+
+    void RestoreOriginalInputFieldVisuals(int index)
+    {
+        TMP_InputField inputField = inputFields[index];
+        inputField.textComponent.color = originalInputTextColors[index];
+    }
+
+    // Alle anderen Methoden bleiben unverändert...
     int CalculatePointsForCategory(int categoryIndex)
     {
         switch (categoryIndex)
@@ -221,55 +433,9 @@ public class PointCalculator2D : MonoBehaviour
     string GetCategoryName(int categoryIndex)
     {
         string[] names = {"Einer", "Zweier", "Dreier", "Vierer", "Fünfer", "Sechser",
-                         "Dreierpasch", "Viererpasch", "Full House", "Kleine Straße", 
+                         "Dreierpasch", "Viererpasch", "Full House", "Kleine Straße",
                          "Große Straße", "Kniffel", "Chance"};
         return categoryIndex < names.Length ? names[categoryIndex] : "Unbekannt";
-    }
-
-    void UpdateCategoryButtons()
-    {
-        // Row Buttons aktivieren/deaktivieren basierend auf Verfügbarkeit
-        Button[] rowButtons = {einerRowButton, zweierRowButton, dreierRowButton, viererRowButton, 
-                              fuenferRowButton, sechserRowButton, dreierpaschenRowButton, 
-                              viererpaschenRowButton, fullHouseRowButton, kleineStraßeRowButton, 
-                              großeStraßeRowButton, kniffelRowButton, chanceRowButton};
-
-        // GEÄNDERT: Prüfen ob bereits ein Wurf in der aktuellen Runde gemacht wurde
-        bool hasThrown = roundManager != null && roundManager.GetCurrentThrowCount() > 0 && currentDiceValues.Count == 5;
-
-        for (int i = 0; i < rowButtons.Length; i++)
-        {
-            if (rowButtons[i] != null)
-            {
-                // GEÄNDERT: Button ist nur verfügbar wenn:
-                // 1. Die Kategorie noch nicht verwendet wurde UND
-                // 2. Mindestens ein Wurf gemacht wurde
-                bool isAvailable = !usedCategories[i] && hasThrown;
-                rowButtons[i].interactable = isAvailable;
-                
-                // Visuelles Feedback
-                ColorBlock colors = rowButtons[i].colors;
-                if (usedCategories[i])
-                {
-                    // Bereits verwendet - grau
-                    colors.normalColor = Color.gray;
-                    colors.disabledColor = Color.gray;
-                }
-                else if (!hasThrown)
-                {
-                    // Noch nicht gewürfelt - dunkelgrau
-                    colors.normalColor = Color.gray * 0.7f;
-                    colors.disabledColor = Color.gray * 0.7f;
-                }
-                else
-                {
-                    // Verfügbar - normal
-                    colors.normalColor = Color.white;
-                    colors.highlightedColor = Color.yellow;
-                }
-                rowButtons[i].colors = colors;
-            }
-        }
     }
 
     void SetAllFieldsReadOnly()
@@ -293,36 +459,13 @@ public class PointCalculator2D : MonoBehaviour
         gesamtpunktzahlText.readOnly = true;
     }
 
-    // Berechnungsmethoden (wie vorher)
-    public int CalculateEiner()
-    {
-        return currentDiceValues.Where(d => d == 1).Sum();
-    }
-
-    public int CalculateZweier()
-    {
-        return currentDiceValues.Where(d => d == 2).Sum();
-    }
-
-    public int CalculateDreier()
-    {
-        return currentDiceValues.Where(d => d == 3).Sum();
-    }
-
-    public int CalculateVierer()
-    {
-        return currentDiceValues.Where(d => d == 4).Sum();
-    }
-
-    public int CalculateFuenfer()
-    {
-        return currentDiceValues.Where(d => d == 5).Sum();
-    }
-
-    public int CalculateSechser()
-    {
-        return currentDiceValues.Where(d => d == 6).Sum();
-    }
+    // Berechnungsmethoden (unverändert)
+    public int CalculateEiner() => currentDiceValues.Where(d => d == 1).Sum();
+    public int CalculateZweier() => currentDiceValues.Where(d => d == 2).Sum();
+    public int CalculateDreier() => currentDiceValues.Where(d => d == 3).Sum();
+    public int CalculateVierer() => currentDiceValues.Where(d => d == 4).Sum();
+    public int CalculateFuenfer() => currentDiceValues.Where(d => d == 5).Sum();
+    public int CalculateSechser() => currentDiceValues.Where(d => d == 6).Sum();
 
     public int CalculateDreierpasch()
     {
@@ -353,7 +496,7 @@ public class PointCalculator2D : MonoBehaviour
     public int CalculateFullHouse()
     {
         var groups = currentDiceValues.GroupBy(d => d).Select(g => g.Count()).OrderByDescending(c => c).ToArray();
-        
+
         if (groups.Length == 2 && groups[0] == 3 && groups[1] == 2)
         {
             return 25;
@@ -364,7 +507,7 @@ public class PointCalculator2D : MonoBehaviour
     public int CalculateKleineStraße()
     {
         var uniqueDice = currentDiceValues.Distinct().OrderBy(d => d).ToArray();
-        
+
         for (int i = 0; i <= uniqueDice.Length - 4; i++)
         {
             bool isStraight = true;
@@ -384,7 +527,7 @@ public class PointCalculator2D : MonoBehaviour
     public int CalculateGroßeStraße()
     {
         var uniqueDice = currentDiceValues.Distinct().OrderBy(d => d).ToArray();
-        
+
         if (uniqueDice.Length == 5)
         {
             bool isStraight = true;
@@ -410,10 +553,7 @@ public class PointCalculator2D : MonoBehaviour
         return 0;
     }
 
-    public int CalculateChance()
-    {
-        return currentDiceValues.Sum();
-    }
+    public int CalculateChance() => currentDiceValues.Sum();
 
     public void CalculateTotal()
     {
@@ -466,9 +606,6 @@ public class PointCalculator2D : MonoBehaviour
     {
         Debug.Log("SPIEL BEENDET!");
         Debug.Log($"Endpunktzahl: {gesamtpunktzahlText.text}");
-        
-        // Hier könntest du ein Game Over UI anzeigen
-        // Oder Highscore speichern, etc.
     }
 
     // Public Methoden für manuelle Kategorie-Auswahl (für UI Buttons)
@@ -485,4 +622,57 @@ public class PointCalculator2D : MonoBehaviour
     public void SelectGroßeStraße() { SelectCategory(10); }
     public void SelectKniffel() { SelectCategory(11); }
     public void SelectChance() { SelectCategory(12); }
+
+
+    // DIESE METHODEN zu deinem bestehenden PointCalculator2D Script HINZUFÜGEN:
+// Am Ende der Klasse, vor der letzten geschweiften Klammer }
+
+public void ResetGame()
+{
+    // Alle verwendeten Kategorien zurücksetzen
+    for (int i = 0; i < usedCategories.Length; i++)
+    {
+        usedCategories[i] = false;
+    }
+    
+    filledCategories = 0;
+    currentDiceValues.Clear();
+    
+    // Alle InputFields leeren
+    ClearAllInputFields();
+    
+    // UI zurücksetzen
+    UpdateCategoryButtons();
+    
+    // Neue Runde starten
+    StartNewRound();
+    
+    Debug.Log("Spiel wurde zurückgesetzt!");
+}
+
+    void ClearAllInputFields()
+    {
+        // Upper Section
+        if (einerInput != null) einerInput.text = "";
+        if (zweierInput != null) zweierInput.text = "";
+        if (dreierInput != null) dreierInput.text = "";
+        if (viererInput != null) viererInput.text = "";
+        if (fuenferInput != null) fuenferInput.text = "";
+        if (sechserInput != null) sechserInput.text = "";
+        if (gesamtUpperText != null) gesamtUpperText.text = "0";
+        if (bonusText != null) bonusText.text = "0";
+
+        // Lower Section
+        if (dreierpaschenInput != null) dreierpaschenInput.text = "";
+        if (viererpaschenInput != null) viererpaschenInput.text = "";
+        if (fullHouseInput != null) fullHouseInput.text = "";
+        if (kleineStraßeInput != null) kleineStraßeInput.text = "";
+        if (großeStraßeInput != null) großeStraßeInput.text = "";
+        if (kniffelInput != null) kniffelInput.text = "";
+        if (chanceInput != null) chanceInput.text = "";
+
+        // Total
+        if (gesamtpunktzahlText != null) gesamtpunktzahlText.text = "0";
+
+    }
 }
