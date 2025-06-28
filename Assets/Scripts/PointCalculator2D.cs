@@ -68,10 +68,11 @@ public class PointCalculator2D : MonoBehaviour
 
     void Update()
     {
-        // Würfelwerte aktualisieren wenn Round beendet oder nach jedem Wurf
+        // Würfelwerte aktualisieren wenn nicht am würfeln
         if (roundManager != null && !diceThrower.IsRolling())
         {
             UpdateCurrentDiceValues();
+            UpdateCategoryButtons(); // HINZUGEFÜGT: Buttons nach jedem Wurf aktualisieren
         }
     }
 
@@ -129,17 +130,18 @@ public class PointCalculator2D : MonoBehaviour
             return;
         }
 
-        // Prüfen ob Runde aktiv ist
-        if (roundManager == null || roundManager.IsRoundActive())
+        // GEÄNDERT: Erlaube Kategorie-Auswahl nach jedem Wurf (nicht nur nach Runden-Ende)
+        // Prüfen ob überhaupt Würfelwerte vorhanden sind (mindestens ein Wurf gemacht)
+        if (currentDiceValues.Count != 5)
         {
-            Debug.Log("Runde noch aktiv - beende erst die Würfe!");
+            Debug.Log("Noch kein Wurf gemacht - würfle zuerst!");
             return;
         }
 
-        // Prüfen ob Würfelwerte vorhanden
-        if (currentDiceValues.Count != 5)
+        // GEÄNDERT: Prüfen ob der Spieler überhaupt schon gewürfelt hat in dieser Runde
+        if (roundManager != null && roundManager.GetCurrentThrowCount() == 0)
         {
-            Debug.Log("Keine gültigen Würfelwerte vorhanden!");
+            Debug.Log("Noch kein Wurf in dieser Runde gemacht!");
             return;
         }
 
@@ -151,11 +153,17 @@ public class PointCalculator2D : MonoBehaviour
         usedCategories[categoryIndex] = true;
         filledCategories++;
         
+        // GEÄNDERT: Runde explizit beenden wenn Kategorie gewählt wird
+        if (roundManager != null)
+        {
+            roundManager.EndCurrentRound();
+        }
+        
         // UI aktualisieren
         UpdateCategoryButtons();
         CalculateTotal();
         
-        Debug.Log($"Kategorie {GetCategoryName(categoryIndex)} gewählt: {points} Punkte");
+        Debug.Log($"Kategorie {GetCategoryName(categoryIndex)} gewählt nach {roundManager?.GetCurrentThrowCount() ?? 0} Würfen: {points} Punkte");
         
         // Prüfen ob Spiel beendet
         if (filledCategories >= 13)
@@ -226,22 +234,36 @@ public class PointCalculator2D : MonoBehaviour
                               viererpaschenRowButton, fullHouseRowButton, kleineStraßeRowButton, 
                               großeStraßeRowButton, kniffelRowButton, chanceRowButton};
 
+        // GEÄNDERT: Prüfen ob bereits ein Wurf in der aktuellen Runde gemacht wurde
+        bool hasThrown = roundManager != null && roundManager.GetCurrentThrowCount() > 0 && currentDiceValues.Count == 5;
+
         for (int i = 0; i < rowButtons.Length; i++)
         {
             if (rowButtons[i] != null)
             {
-                // Button deaktivieren wenn bereits verwendet
-                rowButtons[i].interactable = !usedCategories[i];
+                // GEÄNDERT: Button ist nur verfügbar wenn:
+                // 1. Die Kategorie noch nicht verwendet wurde UND
+                // 2. Mindestens ein Wurf gemacht wurde
+                bool isAvailable = !usedCategories[i] && hasThrown;
+                rowButtons[i].interactable = isAvailable;
                 
-                // Visuelles Feedback für verwendete Kategorien
+                // Visuelles Feedback
                 ColorBlock colors = rowButtons[i].colors;
                 if (usedCategories[i])
                 {
+                    // Bereits verwendet - grau
                     colors.normalColor = Color.gray;
                     colors.disabledColor = Color.gray;
                 }
+                else if (!hasThrown)
+                {
+                    // Noch nicht gewürfelt - dunkelgrau
+                    colors.normalColor = Color.gray * 0.7f;
+                    colors.disabledColor = Color.gray * 0.7f;
+                }
                 else
                 {
+                    // Verfügbar - normal
                     colors.normalColor = Color.white;
                     colors.highlightedColor = Color.yellow;
                 }

@@ -15,6 +15,7 @@ public class Round2DManager : MonoBehaviour
     public int maxTries = 3; // Maximum 3 Würfe pro Runde
     
     private int currentTries; // Aktuelle Anzahl verbleibender Würfe
+    private int currentThrowCount = 0; // HINZUGEFÜGT: Anzahl bereits gemachter Würfe
     private List<GameObject> heldDice = new List<GameObject>(); // Gehaltene Würfel
     private List<int> heldDiceValues = new List<int>(); // Werte der gehaltenen Würfel
     private bool isRoundActive = false; // Ist eine Runde aktiv?
@@ -50,6 +51,7 @@ public class Round2DManager : MonoBehaviour
     public void StartNewRound()
     {
         currentTries = maxTries;
+        currentThrowCount = 0; // HINZUGEFÜGT: Reset der Wurf-Anzahl
         isRoundActive = true;
         
         // Alle gehaltenen Würfel zurück zum Spielfeld
@@ -60,6 +62,19 @@ public class Round2DManager : MonoBehaviour
         UpdateRollButton();
         
         Debug.Log("Neue Runde gestartet! 3 Würfe verfügbar.");
+    }
+    
+    // HINZUGEFÜGT: Methode zum manuellen Beenden der Runde (für Kategorie-Auswahl)
+    public void EndCurrentRound()
+    {
+        isRoundActive = false;
+        Debug.Log("Runde manuell beendet durch Kategorie-Auswahl");
+    }
+    
+    // HINZUGEFÜGT: Getter für aktuelle Wurf-Anzahl
+    public int GetCurrentThrowCount()
+    {
+        return currentThrowCount;
     }
     
     public void HandleRollButton()
@@ -87,20 +102,21 @@ public class Round2DManager : MonoBehaviour
             yield return null;
         }
         
-        // Versuch reduzieren
+        // Versuch reduzieren und Wurf-Anzahl erhöhen
         currentTries--;
+        currentThrowCount++; // HINZUGEFÜGT: Wurf-Anzahl erhöhen
         
         // UI Update
         UpdateTryCounter();
         UpdateRollButton();
         
-        // Prüfen ob Runde beendet
+        // Prüfen ob Runde beendet (nur wenn alle 3 Würfe verwendet)
         if (currentTries <= 0)
         {
             EndRound();
         }
         
-        Debug.Log($"Wurf beendet. Verbleibende Versuche: {currentTries}");
+        Debug.Log($"Wurf beendet. Verbleibende Versuche: {currentTries}, Gesamt Würfe: {currentThrowCount}");
     }
     
     IEnumerator EndRoundAfterAnimation()
