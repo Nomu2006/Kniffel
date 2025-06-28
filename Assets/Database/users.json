@@ -48,6 +48,13 @@
             "password": "Pawel3232!",
             "createdAt": "2025-05-29T14:43:00.2478545Z",
             "avatarId": "avatar_scorpion"
+        },
+        {
+            "userId": "a41f4feb-9066-44b9-871a-3d5dc5e001de",
+            "userName": "Pawel20",
+            "password": "Okmiany22!",
+            "createdAt": "2025-06-28T18:55:25.3614096Z",
+            "avatarId": "avatar_badger"
         }
     ]
 }

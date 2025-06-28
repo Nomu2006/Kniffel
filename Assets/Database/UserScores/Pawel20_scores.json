@@ -1,0 +1,30 @@
+{
+    "userName": "Pawel20",
+    "games": [
+        {
+            "gameId": "9357ccf3-5fe7-4311-bac6-dfba940283b5",
+            "userName": "Pawel20",
+            "finalScore": 62,
+            "gameDate": "2025-06-28 20:56:52",
+            "upperSectionTotal": 25,
+            "bonusPoints": 0,
+            "lowerSectionTotal": 37,
+            "einer": 1,
+            "zweier": 2,
+            "dreier": 3,
+            "vierer": 8,
+            "fuenfer": 5,
+            "sechser": 6,
+            "dreierpasch": 22,
+            "viererpasch": 0,
+            "fullHouse": 0,
+            "kleineStraße": 0,
+            "großeStraße": 0,
+            "kniffel": 0,
+            "chance": 15
+        }
+    ],
+    "totalGamesPlayed": 1,
+    "bestScore": 62,
+    "averageScore": 62.0
+}

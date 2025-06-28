@@ -47,6 +47,9 @@ public class PointCalculator2D : MonoBehaviour
     public Button kniffelRowButton;
     public Button chanceRowButton;
 
+    [Header("Game Over Modal")]
+    public GameModalManager gameModalManager; // Referenz zum Modal Manager
+
     [Header("Visual Highlighting Settings")]
     [SerializeField] private bool enableVisualHighlighting = true;
     [SerializeField] private Color highlightColor = new Color(0.957f, 0.624f, 0.059f, 1f); // #F49F0F
@@ -602,11 +605,69 @@ public class PointCalculator2D : MonoBehaviour
         }
     }
 
-    void EndGame()
+    // ERSETZE deine EndGame() Methode im PointCalculator2D mit dieser:
+
+
+
+void EndGame()
+{
+    Debug.Log($"🔍 User Check: {UserSessionManager.Instance?.LoggedInUsername ?? "NULL"}");
+    Debug.Log("SPIEL BEENDET!");
+    
+    // Score über UserScoreManager speichern
+    if (UserScoreManager.Instance != null)
     {
-        Debug.Log("SPIEL BEENDET!");
-        Debug.Log($"Endpunktzahl: {gesamtpunktzahlText.text}");
+        UserScoreManager.Instance.SaveGameScore(this);
+        Debug.Log("Score wurde gespeichert!");
     }
+    else
+    {
+        Debug.LogWarning("UserScoreManager nicht gefunden - Score wird nicht gespeichert!");
+    }
+    
+    // Optional: Game Over Modal anzeigen
+    if (gameModalManager != null)
+    {
+        gameModalManager.OpenModal();
+    }
+    else
+    {
+        // Fallback: Console-Output mit Statistiken
+        ShowGameOverInfoInConsole();
+    }
+}
+
+// Hilfsmethode für Console-Output falls kein Modal vorhanden
+private void ShowGameOverInfoInConsole()
+{
+    if (UserSessionManager.Instance != null && !string.IsNullOrEmpty(UserSessionManager.Instance.LoggedInUsername))
+    {
+        string currentUser = UserSessionManager.Instance.LoggedInUsername;
+        int finalScore = 0;
+        int.TryParse(gesamtpunktzahlText.text, out finalScore);
+        
+        Debug.Log($"🎉 Spiel beendet für {currentUser}!");
+        Debug.Log($"📊 Finale Punkte: {finalScore}");
+        
+        if (UserScoreManager.Instance != null)
+        {
+            UserScoreData userData = UserScoreManager.Instance.GetUserScoreData(currentUser);
+            
+            Debug.Log($"🏆 Bester Score: {userData.bestScore}");
+            Debug.Log($"🎮 Spiele gespielt: {userData.totalGamesPlayed}");
+            Debug.Log($"📈 Durchschnitt: {userData.averageScore:F1}");
+            
+            if (finalScore >= userData.bestScore)
+            {
+                Debug.Log("🎊 NEUER PERSÖNLICHER REKORD! 🎊");
+            }
+        }
+    }
+    else
+    {
+        Debug.Log("Nicht eingeloggt - keine Statistiken verfügbar");
+    }
+}
 
     // Public Methoden für manuelle Kategorie-Auswahl (für UI Buttons)
     public void SelectEiner() { SelectCategory(0); }
